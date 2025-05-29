@@ -5,7 +5,7 @@ import pandas as pd
 st.set_page_config(page_title="Sales Data App", layout="wide")
 
 # Sidebar - nawigacja
-view = st.sidebar.radio("Wybierz widok:", ["Tabela", "git add streamlit_app.pyWykres"])
+view = st.sidebar.radio("Wybierz widok:", ["Tabela", "Wykres"])
 
 # Połączenie z bazą danych SQLite
 conn = sqlite3.connect("sales_data.db")
