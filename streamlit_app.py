@@ -11,23 +11,19 @@ view = st.sidebar.radio("Wybierz widok:", ["Tabela", "Wykres"])
 conn = sqlite3.connect("sales_data.db")
 df = pd.read_sql_query("SELECT * FROM sales", conn)
 
-# Widok 1: tabela danych
-if view == "Tabela":
-    st.title("Tabela danych sprzedażowych")
-    st.dataframe(df, use_container_width=True)
 
-# Widok 2: wykres
 elif view == "Wykres":
-    st.title("Wizualizacja danych sprzedażowych")
+st.title("Sprzedaż wg linii produktów")
 
-    # Przykład: zsumowana sprzedaż wg regionu (dostosuj do kolumn w Twoim CSV)
-    if "Region" in df.columns and "Total Revenue" in df.columns:
-        chart_data = df.groupby("Region")["Total Revenue"].sum().reset_index()
-        chart_data = chart_data.sort_values(by="Total Revenue", ascending=False)
+# Sprawdź czy kolumny istnieją
+if "PRODUCTLINE" in df.columns and "SALES" in df.columns:
+    sales_by_product = df.groupby("PRODUCTLINE")["SALES"].sum().reset_index()
+    sales_by_product = sales_by_product.sort_values(by="SALES", ascending=False)
 
-        st.bar_chart(chart_data, x="Region", y="Total Revenue", use_container_width=True)
-    else:
-        st.warning("Nie znaleziono odpowiednich kolumn do utworzenia wykresu.")
+    st.bar_chart(sales_by_product, x="PRODUCTLINE", y="SALES", use_container_width=True)
+else:
+    st.warning("Brakuje kolumn PRODUCTLINE lub SALES.")
+
 
 # Zamknij połączenie z bazą
 conn.close()
